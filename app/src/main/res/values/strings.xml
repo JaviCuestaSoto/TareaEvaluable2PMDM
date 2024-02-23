@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">TareaEvaluable2</string>
+    <string-array name="categorias">
+        <item>Todas las categorías</item>
+        <item>Lácteos</item>
+        <item>Frutas y verduras</item>
+        <item>Productos frescos</item>
+        <item>Carnicería</item>
+        <item>Pescadería</item>
+        <item>Bebidas</item>
+    </string-array>
+</resources>
