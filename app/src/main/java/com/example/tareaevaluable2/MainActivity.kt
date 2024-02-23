@@ -2,6 +2,7 @@ package com.example.tareaevaluable2
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -69,8 +70,19 @@ class MainActivity : AppCompatActivity(), ProductosAdapter.OnRecyclerProductoLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.carritoCompra -> {
+                val datosRecibidos = intent.getSerializableExtra("listaCarrito") as? ArrayList<Producto>
                 val intent = Intent (this, SecondActivity::class.java)
-                intent.putExtra("ListaProductos", ArrayList(listaProductosSeleccionados))
+                Log.v("dat", datosRecibidos.toString())
+                if (datosRecibidos != null) {
+                    for (i in datosRecibidos.indices) {
+                        val pro = datosRecibidos[i]
+                        listaProductosSeleccionados.add(pro)
+                    }
+                    intent.putExtra("ListaProductos", ArrayList(listaProductosSeleccionados))
+                } else {
+                    intent.putExtra("ListaProductos", ArrayList(listaProductosSeleccionados))
+                }
+
                 startActivity(intent)
             }
         }

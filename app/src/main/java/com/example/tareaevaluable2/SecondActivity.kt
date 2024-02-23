@@ -1,5 +1,6 @@
 package com.example.tareaevaluable2
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -73,5 +74,16 @@ class SecondActivity : AppCompatActivity(), ProductoSeleccionadoAdapter.OnRecycl
         listaProductosSeleccionados.remove(producto)
         adaptadorProductoSeleccionado.notifyDataSetChanged()
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        val listaCarrito = listaProductosSeleccionados.clone() as ArrayList<Producto>
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("listaCarrito", ArrayList(listaCarrito))
+        startActivity(intent)
+    }
+
+
 }
 
