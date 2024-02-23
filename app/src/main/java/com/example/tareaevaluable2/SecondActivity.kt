@@ -3,6 +3,7 @@ package com.example.tareaevaluable2
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,12 +29,15 @@ class SecondActivity : AppCompatActivity(), ProductoSeleccionadoAdapter.OnRecycl
         supportActionBar?.title = "CARRITO"
 
         listaProductosSeleccionados =
-            (intent.getSerializableExtra("ListaProductos") as? ArrayList<Producto>)!!
+            (intent.getSerializableExtra("ListaProductos") as ArrayList<Producto>)
+        Log.v("cuenta", listaProductosSeleccionados.size.toString())
+        adaptadorProductoSeleccionado = ProductoSeleccionadoAdapter(listaProductosSeleccionados, this)
 
         adaptadorProductoSeleccionado = ProductoSeleccionadoAdapter(listaProductosSeleccionados, this)
 
         binding.recyclerProductosSecond.layoutManager = LinearLayoutManager(this)
         binding.recyclerProductosSecond.adapter = adaptadorProductoSeleccionado
+        binding.textViewResultadoCompras.text = actualizarPrecio().toString()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -54,25 +58,33 @@ class SecondActivity : AppCompatActivity(), ProductoSeleccionadoAdapter.OnRecycl
                 listaProductosSeleccionados.removeAll(listaProductosSeleccionados)
                 listaProductosSeleccionados.clear()
                 adaptadorProductoSeleccionado.notifyDataSetChanged()
+                binding.textViewResultadoCompras.text = "0"
             }
             R.id.cancelar_Compra -> {
                 Snackbar.make(
                     binding.root,
-                    "Carrito vacío.",
+                    "El carrito está vacío.",
                     Snackbar.LENGTH_SHORT
                 ).show()
                 listaProductosSeleccionados.removeAll(listaProductosSeleccionados)
                 listaProductosSeleccionados.clear()
                 adaptadorProductoSeleccionado.notifyDataSetChanged()
+                binding.textViewResultadoCompras.text = "0"
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onProductoSeleccionadoSelected(producto: Producto) {
-        val posicion = adaptadorProductoSeleccionado.itemCount
+
         listaProductosSeleccionados.remove(producto)
         adaptadorProductoSeleccionado.notifyDataSetChanged()
+
+        var precioActual: Int = binding.textViewResultadoCompras.text.toString().toInt()
+        var precioProducto: Int = producto.precio
+        var resultado = precioActual - precioProducto
+
+        binding.textViewResultadoCompras.text = resultado.toString()
     }
 
     override fun onBackPressed() {
@@ -84,6 +96,14 @@ class SecondActivity : AppCompatActivity(), ProductoSeleccionadoAdapter.OnRecycl
         startActivity(intent)
     }
 
+    fun actualizarPrecio (): Int{
+        for (i in 0 until adaptadorProductoSeleccionado.listaSeleccionado?.size!!){
+            var producto = adaptadorProductoSeleccionado.listaSeleccionado.get(i)
+            var precio =  producto.precio
+            precioTotal += precio
+        }
+        return precioTotal
+    }
 
 }
 
