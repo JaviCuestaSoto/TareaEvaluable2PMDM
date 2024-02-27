@@ -53,6 +53,10 @@ class SecondActivity : AppCompatActivity(), ProductoSeleccionadoAdapter.OnRecycl
                     "Compra confirmada. Total: ${precioTotal} €.",
                     Snackbar.LENGTH_SHORT
                 ).setAction("Cerrar") {
+                    val listaCarrito = listaProductosSeleccionados.clone() as ArrayList<Producto>
+                    val intent = Intent()
+                    intent.putExtra("listaCarrito", ArrayList(listaCarrito))
+                    startActivity(intent)
                     finish()
                 }.show()
                 listaProductosSeleccionados.removeAll(listaProductosSeleccionados)
